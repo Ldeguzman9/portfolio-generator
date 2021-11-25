@@ -1,10 +1,26 @@
-const fs = require("fs");
-const generatePage = require("./src/page-template.js");
+//Module 3
+const inquirer = require("inquirer");
+// const fs = require('fs');
+// const generatePage = require('./src/page-template');
 
-const profileDataArgs = process.argv.slice(2);
+inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "name",
+      message: "What is your name?",
+    },
+  ])
+  .then((answers) => console.log(answers));
+
+//verify that inquirer had been successfully imported
+//console.log(inquirer);
+
+//Module 1
+//const profileDataArgs = process.argv.slice(2);
 // console.log(profileDataArgs);
 
-const [name, github] = profileDataArgs;
+//const [name, github] = profileDataArgs;
 
 // // Notice the lack of parentheses around the `profileDataArr` parameter?
 // const printProfileData = (profileDataArr) => {
@@ -23,10 +39,14 @@ const [name, github] = profileDataArgs;
 
 // printProfileData(profileDataArgs);
 
-// Modal 2
+// Module 2
+// const fs = require("fs");
+// const generatePage = require("./src/page-template.js");
 
-fs.writeFile("./index.html", generatePage(name, github), (err) => {
-  if (err) throw new Error(err);
+// const pageHTML = generatePage(name, github);
 
-  console.log("Portfolio complete! Check out index.html to see the output!");
-});
+// fs.writeFile("./index.html", generatePage(name, github), (err) => {
+//   if (err) throw new Error(err);
+
+//   console.log("Portfolio complete! Check out index.html to see the output!");
+// });
