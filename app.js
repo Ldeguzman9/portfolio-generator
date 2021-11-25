@@ -1,7 +1,7 @@
 //Module 3
+const fs = require("fs");
 const inquirer = require("inquirer");
-// const fs = require('fs');
-// const generatePage = require('./src/page-template');
+const generatePage = require("./src/page-template");
 
 const promptUser = () => {
   return inquirer.prompt([
@@ -21,19 +21,28 @@ const promptUser = () => {
     {
       type: "input",
       name: "github",
-      message: "Enter your Github Username (Required)",
+      message: "Enter your GitHub Username (Required)",
       validate: (githubInput) => {
         if (githubInput) {
           return true;
         } else {
-          console.log("Please enter your GitHub User Name!");
+          console.log("Please enter your GitHub username!");
+          return false;
         }
       },
+    },
+    {
+      type: "confirm",
+      name: "confirmAbout",
+      message:
+        'Would you like to enter some information about yourself for an "About" section?',
+      default: true,
     },
     {
       type: "input",
       name: "about",
       message: "Provide some information about yourself:",
+      when: ({ confirmAbout }) => confirmAbout,
     },
   ]);
 };
@@ -44,7 +53,8 @@ const promptProject = (portfolioData) => {
 Add a New Project
 =================
 `);
-  //If there's no 'projects' array property, create one
+
+  // If there's no 'projects' array property, create one
   if (!portfolioData.projects) {
     portfolioData.projects = [];
   }
@@ -54,11 +64,12 @@ Add a New Project
         type: "input",
         name: "name",
         message: "What is the name of your project? (Required)",
-        validate: (projectNameInput) => {
-          if (projectNameInput) {
+        validate: (nameInput) => {
+          if (nameInput) {
             return true;
           } else {
-            console.log("Please enter your project name!");
+            console.log("You need to enter a project name!");
+            return false;
           }
         },
       },
@@ -66,18 +77,19 @@ Add a New Project
         type: "input",
         name: "description",
         message: "Provide a description of the project (Required)",
-        validate: (projecDescriptionInput) => {
-          if (projectDescriptionInput) {
+        validate: (descriptionInput) => {
+          if (descriptionInput) {
             return true;
           } else {
-            console.log("Please enter your project description!");
+            console.log("You need to enter a project description!");
+            return false;
           }
         },
       },
       {
         type: "checkbox",
         name: "languages",
-        message: "What did you build this project with? (Check all that apply)",
+        message: "What did you this project with? (Check all that apply)",
         choices: [
           "JavaScript",
           "HTML",
@@ -92,11 +104,12 @@ Add a New Project
         type: "input",
         name: "link",
         message: "Enter the GitHub link to your project. (Required)",
-        validate: (githubLinkInput) => {
-          if (githubLinkInput) {
+        validate: (linkInput) => {
+          if (linkInput) {
             return true;
           } else {
-            console.log("Please enter your Git Hub link!");
+            console.log("You need to enter a project GitHub link!");
+            return false;
           }
         },
       },
@@ -113,7 +126,6 @@ Add a New Project
         default: false,
       },
     ])
-
     .then((projectData) => {
       portfolioData.projects.push(projectData);
       if (projectData.confirmAddProject) {
@@ -125,9 +137,16 @@ Add a New Project
 };
 
 promptUser()
-  .then((answers) => console.log(answers))
   .then(promptProject)
-  .then((projectAnswers) => console.log(projectAnswers));
+  .then((portfolioData) => {
+    console.log(portfolioData);
+    // will be uncommented in lesson 4
+    // const pageHTML = generatePage(portfolioData);
+    // fs.writeFile('./index.html', pageHTML, err => {
+    //   if (err) throw new Error(err);
+    //   console.log('Page created! Check out index.html in this directory to see it!');
+    // });
+  });
 //verify that inquirer had been successfully imported
 //console.log(inquirer);
 
