@@ -1,54 +1,6 @@
-//Module 3
-const fs = require("fs");
 const inquirer = require("inquirer");
 const generatePage = require("./src/page-template");
-
-//Mock data
-// const mockData = {
-//   name: "Lernantino",
-//   github: "lernantino",
-//   confirmAbout: true,
-//   about:
-//     "Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.",
-//   projects: [
-//     {
-//       name: "Run Buddy",
-//       description:
-//         "Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.",
-//       languages: ["HTML", "CSS"],
-//       link: "https://github.com/lernantino/run-buddy",
-//       feature: true,
-//       confirmAddProject: true,
-//     },
-//     {
-//       name: "Taskinator",
-//       description:
-//         "Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.",
-//       languages: ["JavaScript", "HTML", "CSS"],
-//       link: "https://github.com/lernantino/taskinator",
-//       feature: true,
-//       confirmAddProject: true,
-//     },
-//     {
-//       name: "Taskmaster Pro",
-//       description:
-//         "Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.",
-//       languages: ["JavaScript", "jQuery", "CSS", "HTML", "Bootstrap"],
-//       link: "https://github.com/lernantino/taskmaster-pro",
-//       feature: false,
-//       confirmAddProject: true,
-//     },
-//     {
-//       name: "Robot Gladiators",
-//       description:
-//         "Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.",
-//       languages: ["JavaScript"],
-//       link: "https://github.com/lernantino/robot-gladiators",
-//       feature: false,
-//       confirmAddProject: false,
-//     },
-//   ],
-// };
+const { writeFile, copyFile } = require("./utils/generate-site");
 
 const promptUser = () => {
   return inquirer.prompt([
@@ -183,56 +135,21 @@ Add a New Project
     });
 };
 
-// moch data function call
-//const pageHTML = generatePage(mockData);
-
-//comment back in later
 promptUser()
   .then(promptProject)
   .then((portfolioData) => {
-    // will be uncommented in lesson 4
-    const pageHTML = generatePage(portfolioData);
-    fs.writeFile("./index.html", pageHTML, (err) => {
-      if (err) throw new Error(err);
-      console.log(
-        "Page created! Check out index.html in this directory to see it!"
-      );
-    });
+    return generatePage(portfolioData);
+  })
+  .then((pageHTML) => {
+    return writeFile(pageHTML);
+  })
+  .then((writeFileResponse) => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then((copyFileResponse) => {
+    console.log(copyFileResponse);
+  })
+  .catch((err) => {
+    console.log(err);
   });
-//verify that inquirer had been successfully imported
-//console.log(inquirer);
-
-//Module 1
-//const profileDataArgs = process.argv.slice(2);
-// console.log(profileDataArgs);
-
-//const [name, github] = profileDataArgs;
-
-// // Notice the lack of parentheses around the `profileDataArr` parameter?
-// const printProfileData = (profileDataArr) => {
-//   // This...
-//   for (let i = 0; i < profileDataArr.length; i += 1) {
-//     console.log(profileDataArr[i]);
-//   }
-
-//   console.log("================");
-
-//   // Is the same as this...
-//   profileDataArr.forEach((profileItem) => {
-//     console.log(profileItem);
-//   });
-// };
-
-// printProfileData(profileDataArgs);
-
-// Module 2
-// const fs = require("fs");
-// const generatePage = require("./src/page-template.js");
-
-// const pageHTML = generatePage(name, github);
-
-// fs.writeFile("./index.html", generatePage(name, github), (err) => {
-//   if (err) throw new Error(err);
-
-//   console.log("Portfolio complete! Check out index.html to see the output!");
-// });
